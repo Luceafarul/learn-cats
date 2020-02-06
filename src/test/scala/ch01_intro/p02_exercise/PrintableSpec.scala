@@ -3,7 +3,7 @@ package ch01_intro.p02_exercise
 import ch01_intro.p01_anatomy_of_type_class.Person
 import org.scalatest.{FlatSpec, Matchers}
 
-class PrintableSpec extends FlatSpec with Matchers {
+class PrintableSpec extends FlatSpec with Matchers with SpecHelper {
 
   import ch01_intro.p02_exercise.PrintableSyntax._
   import ch01_intro.p02_exercise.PrintableInstances._
@@ -22,8 +22,6 @@ class PrintableSpec extends FlatSpec with Matchers {
   }
 
   it should "accept Cat and return String representation" in {
-    final case class Cat(name: String, age: Int, color: String)
-
     implicit val printablePerson: Printable[Cat] = (cat: Cat) => {
       val name = Printable.format(cat.name)
       val age = Printable.format(cat.age)
@@ -31,8 +29,7 @@ class PrintableSpec extends FlatSpec with Matchers {
       s"$name is a $age year-old ${color.toLowerCase} cat."
     }
 
-    val marcus = Cat("Marcus", 7, "Black")
-    Printable.format(marcus) shouldBe "Marcus is a 7 year-old black cat."
-    marcus.format shouldBe "Marcus is a 7 year-old black cat."
+    Printable.format(cat) shouldBe "Marcus is a 7 year-old black cat."
+    cat.format shouldBe "Marcus is a 7 year-old black cat."
   }
 }
