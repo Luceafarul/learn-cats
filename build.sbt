@@ -10,7 +10,8 @@ lazy val root = (project in file("."))
     name := "cats-demo",
     libraryDependencies ++= Seq(
       scalaTest % Test,
-      catsCore
+      catsCore,
+      catsEffect
     )
   )
 
