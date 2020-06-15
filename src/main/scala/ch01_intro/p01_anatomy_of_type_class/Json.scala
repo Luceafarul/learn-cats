@@ -19,3 +19,10 @@ object JsonSyntax {
 trait JsonWriter[A] {
     def write(value: A): Json
 }
+
+object JsonWriter {
+    implicit def optionWriter[A](implicit writer: JsonWriter[A]): JsonWriter[Option[A]] = (option: Option[A]) => option match {
+        case Some(value) => writer.write(value)
+        case None => JsNull
+    }
+}
