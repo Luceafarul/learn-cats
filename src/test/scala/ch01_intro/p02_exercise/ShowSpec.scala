@@ -21,4 +21,19 @@ class ShowSpec extends FlatSpec with Matchers with SpecHelper {
 
     cat.show shouldBe "Marcus is a 7 year-old black cat."
   }
+
+  it should "return String representation of Cat (using show method)" in {
+    import cats.instances.int._
+    import cats.instances.string._
+
+    implicit val showCat: Show[Cat] = Show.show { cat =>
+      val name = cat.name.show
+      val age = cat.age.show
+      val color = cat.color.show.toLowerCase
+
+      s"$name is a $age year-old $color cat."
+    }
+
+    cat.show shouldBe "Marcus is a 7 year-old black cat."
+  }
 }

@@ -21,7 +21,8 @@ class EqSpec extends FlatSpec with Matchers with SpecHelper {
 
     cat1 eqv cat2 shouldBe false
     cat1 eqv cat1 shouldBe true
-    optionCat1 neqv optionCat2 shouldBe true
+    cat1 neqv cat2 shouldBe true
+    optionCat1 =!= optionCat2 shouldBe true
     optionCat1 eqv optionCat1 shouldBe true
   }
 }
