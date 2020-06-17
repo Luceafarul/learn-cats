@@ -1,5 +1,9 @@
 package ch02_monoids_and_semigroups
 
+import cats.Monoid
+import cats.instances.int._
+import cats.instances.option._
+import cats.syntax.semigroup._
 import org.scalatest.{WordSpec, Matchers}
 import ch02_monoids_and_semigroups.super_adder.SuperAdder
 import ch02_monoids_and_semigroups.super_adder.Order
