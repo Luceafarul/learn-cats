@@ -32,4 +32,12 @@ class PrintableSpec extends FlatSpec with Matchers with SpecHelper {
     Printable.format(cat) shouldBe "Marcus is a 7 year-old black cat."
     cat.format shouldBe "Marcus is a 7 year-old black cat."
   }
+
+  it should "accept Boolean and return String representation" in {
+    val t = true
+    val f = false
+
+    t.format shouldBe "yes"
+    f.format shouldBe "no"
+  }
 }

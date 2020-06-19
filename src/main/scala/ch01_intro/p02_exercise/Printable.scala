@@ -2,6 +2,10 @@ package ch01_intro.p02_exercise
 
 trait Printable[A] {
   def format(value: A): String
+
+  def contramap[B](f: B => A): Printable[B] = new Printable[B] {
+    def format(value: B): String = value.toString
+  }
 }
 
 object Printable {
