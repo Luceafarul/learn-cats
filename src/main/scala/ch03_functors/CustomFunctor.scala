@@ -9,4 +9,3 @@ object Box {
     def map[A, B](box: Box[A])(f: A => B): Box[B] = Box(f(box.value))
   }
 }
-
