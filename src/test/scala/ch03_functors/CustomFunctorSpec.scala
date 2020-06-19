@@ -12,15 +12,6 @@ class CustomFunctorSpec extends WordSpec with Matchers {
       boxWithInt.map(value => value + 1) shouldBe Box(14)
     }
 
-    "return String representation of the Box with Int" in {
-      import ch01_intro.p02_exercise.PrintableSyntax._
-      import ch01_intro.p02_exercise.PrintableInstances._
-
-      val boxWithInt = Box(123)
-
-      boxWithInt.format shouldBe "Box[123]"
-    }
-
     "add 3 for every value in the Tree" in {
       val tree: Tree[Int] = Branch(Branch(Leaf(1), Leaf(2)), Leaf(3))
 
