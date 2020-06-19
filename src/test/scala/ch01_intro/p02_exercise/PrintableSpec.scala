@@ -1,6 +1,7 @@
 package ch01_intro.p02_exercise
 
 import ch01_intro.p01_anatomy_of_type_class.Person
+import ch03_functors._
 import org.scalatest.{FlatSpec, Matchers}
 
 class PrintableSpec extends FlatSpec with Matchers with SpecHelper {
@@ -14,7 +15,8 @@ class PrintableSpec extends FlatSpec with Matchers with SpecHelper {
   }
 
   it should "accept Person and return String representation" in {
-    implicit val printablePerson: Printable[Person] = (person: Person) => s"Person(${person.name}, ${person.email})"
+    implicit val printablePerson: Printable[Person] =
+      (person: Person) => s"Person(${person.name}, ${person.email})"
 
     val marcus = Person("Marcus", "marcus@test.mail")
     Printable.format(marcus) shouldBe "Person(Marcus, marcus@test.mail)"
@@ -39,5 +41,17 @@ class PrintableSpec extends FlatSpec with Matchers with SpecHelper {
 
     t.format shouldBe "yes"
     f.format shouldBe "no"
+  }
+
+  it should "return String representation of the Box with Int" in {
+    val boxWithInt = Box(123)
+
+    boxWithInt.format shouldBe "123"
+  }
+
+    it should "return String representation of the Box with True" in {
+    val boxWithTrue = Box(true)
+
+    boxWithTrue.format shouldBe "yes"
   }
 }
