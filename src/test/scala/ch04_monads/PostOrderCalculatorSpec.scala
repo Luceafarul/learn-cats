@@ -24,11 +24,17 @@ class PostOrderCalculatorSpec extends WordSpec with Matchers {
     }
 
     "evaluate multi-stage expression using evalAll" in {
-        // val program = evalAll(List("1", "2", "3", "+", "+", "3", "*"))
-        val program = evalAll(List("1", "2", "+", "3", "*"))
+        val program = evalAll(List("1", "2", "3", "+", "+", "3", "*"))
         val result = program.runA(Nil).value
 
-        result shouldBe 9
+        result shouldBe 18
+    }
+
+    "evaluate input string to int result" in {
+        val input = "1 3 3 + + 3 *"
+        val result = evalInput(input)
+
+        result shouldBe 21
     }
   }
 }
