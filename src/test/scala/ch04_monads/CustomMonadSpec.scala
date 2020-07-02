@@ -12,7 +12,7 @@ class CustomMonadSpec extends WordSpec with Matchers {
       val person = Person("Marcus", 73)
       val result = treeMonad.pure(person)
 
-      result shouldBe Leaf(person)
+      result shouldBe leaf(person)
     }
 
     "transform tree content with flatMap" in {
