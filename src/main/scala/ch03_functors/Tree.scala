@@ -16,7 +16,7 @@ object Tree {
     }
   }
 
-  val treeMonad: Monad[Tree] = new Monad[Tree] {
+  implicit val treeMonad: Monad[Tree] = new Monad[Tree] {
     def flatMap[A, B](fa: Tree[A])(f: A => Tree[B]): Tree[B] = fa match {
       case Leaf(value)         => f(value)
       case Branch(left, right) => Branch(flatMap(left)(f), flatMap(right)(f))

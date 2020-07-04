@@ -2,6 +2,7 @@ package ch04_monads
 
 import ch03_functors.Tree
 import ch03_functors.Tree._
+import cats.syntax.applicative._
 import org.scalatest.{WordSpec, Matchers}
 
 class CustomMonadSpec extends WordSpec with Matchers {
@@ -10,7 +11,7 @@ class CustomMonadSpec extends WordSpec with Matchers {
   "TreeMonad" should {
     "wrap value with pure method" in {
       val person = Person("Marcus", 73)
-      val result = treeMonad.pure(person)
+      val result = person.pure
 
       result shouldBe leaf(person)
     }
