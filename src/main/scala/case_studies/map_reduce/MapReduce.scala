@@ -1,13 +1,18 @@
 package case_studies.map_reduce
 
 import cats.Monoid
-import cats.syntax.semigroup._
+import cats.Foldable
+import cats.Traverse
 import cats.instances.future._
 import cats.instances.list._
+import cats.instances.vector._
+import cats.syntax.semigroup._
 import cats.syntax.traverse._
+import cats.syntax.foldable._
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import cats.Foldable
 
 object MapReduce {
   def foldMap[A, B: Monoid](seq: Vector[A])(f: A => B): B =
@@ -18,17 +23,29 @@ object MapReduce {
     // seq.map(f).foldLeft(Monoid[B].empty)(_ |+| _)
     seq.foldLeft(Monoid[B].empty)(_ |+| f(_))
 
+  def foldMapCats[A, B: Monoid](seq: Vector[A])(f: A => B): B =
+    seq.foldMap(f)
+
   def parallelFoldMap[A, B: Monoid](seq: Vector[A])(f: A => B): Future[B] = {
-    val cpusNumber = Runtime.getRuntime.availableProcessors
-    // 1. Divide to batch for each CPU
+    val coresNumber = Runtime.getRuntime.availableProcessors
+    val groupsNumber = (1.0 * seq.size / coresNumber).ceil.toInt
+
     seq
-      .grouped(cpusNumber)
-      // 2. map over batches in parallel
+      .grouped(groupsNumber)
       .map(vs => Future(foldMap(vs)(f)))
-      // 3. reduce each batches in parallel
       .toList
       .sequence
       .map(ls => ls.foldLeft(Monoid[B].empty)(_ |+| _))
-    // 4. reduce the batches
+  }
+
+  def parallelFoldMapCats[A, B: Monoid](seq: Vector[A])(f: A => B): Future[B] = {
+    val coresNumber = Runtime.getRuntime.availableProcessors
+    val groupsNumber = (1.0 * seq.size / coresNumber).ceil.toInt
+
+    seq
+      .grouped(groupsNumber)
+      .toVector
+      .traverse(vs => Future(vs.foldMap(f)))
+      .map(vs => vs.combineAll)
   }
 }
