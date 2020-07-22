@@ -23,4 +23,23 @@ class DataValidationSpec extends WordSpec with Matchers {
       check(0) shouldBe Either.left(List("Must be > 2", "Must be < -2"))
     }
   }
+
+  "Check" should {
+    "validate and combine value" in {
+      val a: Check[List[String], Int] = Check.pure { v =>
+        if (v > 2) v.asRight
+        else List("Must be > 2").asLeft
+      }
+
+      val b: Check[List[String], Int] = Check.pure { v =>
+        if (v < -2) v.asRight
+        else List("Must be < -2").asLeft
+      }
+
+      val check: Check[List[String], Int] = a.and(b)
+
+      check(5) shouldBe Either.left(List("Must be < -2"))
+      check(0) shouldBe Either.left(List("Must be > 2", "Must be < -2"))
+    }
+  }
 }
