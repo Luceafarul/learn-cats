@@ -27,7 +27,7 @@ class DataValidationSpec extends WordSpec with Matchers {
   }
 
   "Check" should {
-    "validate and combine value" in {
+    "validate and combine an errors with and function" in {
       val a: Check[List[String], Int] = Check.pure { v =>
         if (v > 2) Valid(v)
         else Invalid(List("Must be > 2"))
@@ -41,6 +41,39 @@ class DataValidationSpec extends WordSpec with Matchers {
       val check: Check[List[String], Int] = a.and(b)
 
       check(5) shouldBe Invalid(List("Must be < -2"))
+      check(0) shouldBe Invalid(List("Must be > 2", "Must be < -2"))
+    }
+
+    "validate and combine values with and function" in {
+      val a: Check[List[String], Int] = Check.pure { v =>
+        if (v > 2) Valid(v)
+        else Invalid(List("Must be > 2"))
+      }
+
+      val b: Check[List[String], Int] = Check.pure { v =>
+        if (v < 12) Valid(v)
+        else Invalid(List("Must be < 12"))
+      }
+
+      val check: Check[List[String], Int] = a.and(b)
+
+      check(7) shouldBe Valid(7)
+    }
+
+    "validate and combine values or an errors with or function" in {
+      val a: Check[List[String], Int] = Check.pure { v =>
+        if (v > 2) Valid(v)
+        else Invalid(List("Must be > 2"))
+      }
+
+      val b: Check[List[String], Int] = Check.pure { v =>
+        if (v < -2) Valid(v)
+        else Invalid(List("Must be < -2"))
+      }
+
+      val check: Check[List[String], Int] = a.or(b)
+
+      check(5) shouldBe Valid(5)
       check(0) shouldBe Invalid(List("Must be > 2", "Must be < -2"))
     }
   }
