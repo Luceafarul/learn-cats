@@ -1,8 +1,10 @@
 package case_studies.data_validation
 
+import cats.Monad
 import cats.data.Validated
 import cats.data.Validated._
 import cats.kernel.Semigroup
+import cats.instances.either._
 import cats.syntax.apply._
 import cats.syntax.either._
 import cats.syntax.semigroup._
@@ -51,11 +53,17 @@ sealed trait Check[E, A, B] {
   def apply(a: A)(implicit s: Semigroup[E]): Validated[E, B]
 
   def map[C](f: B => C): Check[E, A, C] = Map[E, A, B, C](this, f)
+
+  def flatMap[C](f: B => Check[E, A, C]): Check[E, A, C] = FlatMap[E, A, B, C](this, f)
 }
 
 object Check {
   final case class Map[E, A, B, C](check: Check[E, A, B], f: B => C) extends Check[E, A, C] {
     def apply(a: A)(implicit s: Semigroup[E]): Validated[E, C] = check(a).map(f)
+  }
+
+  final case class FlatMap[E, A, B, C](check: Check[E, A, B], f: B => Check[E, A, C]) extends Check[E, A, C] {
+      def apply(a: A)(implicit s: Semigroup[E]): Validated[E, C] = check(a).withEither(e => e.flatMap(b => f(b)(a).toEither))
   }
 
   final case class Pure[E, A](p: Predicate[E, A]) extends Check[E, A, A] {
