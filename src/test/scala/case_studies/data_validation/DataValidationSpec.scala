@@ -26,52 +26,53 @@ class DataValidationSpec extends WordSpec with Matchers {
     }
   }
 
-  "Check" should {
+  "Predicate" should {
+    import Predicate._
     "validate and combine an errors with and function" in {
-      val a: Check[List[String], Int] = Check.pure { v =>
+      val a: Predicate[List[String], Int] = Pure { v =>
         if (v > 2) Valid(v)
         else Invalid(List("Must be > 2"))
       }
 
-      val b: Check[List[String], Int] = Check.pure { v =>
+      val b: Predicate[List[String], Int] = Pure { v =>
         if (v < -2) Valid(v)
         else Invalid(List("Must be < -2"))
       }
 
-      val check: Check[List[String], Int] = a.and(b)
+      val check: Predicate[List[String], Int] = a.and(b)
 
       check(5) shouldBe Invalid(List("Must be < -2"))
       check(0) shouldBe Invalid(List("Must be > 2", "Must be < -2"))
     }
 
     "validate and combine values with and function" in {
-      val a: Check[List[String], Int] = Check.pure { v =>
+      val a: Predicate[List[String], Int] = Pure { v =>
         if (v > 2) Valid(v)
         else Invalid(List("Must be > 2"))
       }
 
-      val b: Check[List[String], Int] = Check.pure { v =>
+      val b: Predicate[List[String], Int] = Pure { v =>
         if (v < 12) Valid(v)
         else Invalid(List("Must be < 12"))
       }
 
-      val check: Check[List[String], Int] = a.and(b)
+      val check: Predicate[List[String], Int] = a.and(b)
 
       check(7) shouldBe Valid(7)
     }
 
     "validate and combine values or an errors with or function" in {
-      val a: Check[List[String], Int] = Check.pure { v =>
+      val a: Predicate[List[String], Int] = Pure { v =>
         if (v > 2) Valid(v)
         else Invalid(List("Must be > 2"))
       }
 
-      val b: Check[List[String], Int] = Check.pure { v =>
+      val b: Predicate[List[String], Int] = Pure { v =>
         if (v < -2) Valid(v)
         else Invalid(List("Must be < -2"))
       }
 
-      val check: Check[List[String], Int] = a.or(b)
+      val check: Predicate[List[String], Int] = a.or(b)
 
       check(5) shouldBe Valid(5)
       check(0) shouldBe Invalid(List("Must be > 2", "Must be < -2"))

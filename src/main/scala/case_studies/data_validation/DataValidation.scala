@@ -21,12 +21,12 @@ final case class CheckF[E, A](func: A => Either[E, A]) {
   }
 }
 
-sealed trait Check[E, A] {
-  import Check._
+sealed trait Predicate[E, A] {
+  import Predicate._
 
-  def and(that: Check[E, A]): Check[E, A] = And(this, that)
+  def and(that: Predicate[E, A]): Predicate[E, A] = And(this, that)
 
-  def or(that: Check[E, A]): Check[E, A] = Or(this, that)
+  def or(that: Predicate[E, A]): Predicate[E, A] = Or(this, that)
 
   def apply(a: A)(implicit s: Semigroup[E]): Validated[E, A] = this match {
     case Pure(func) => func(a)
@@ -35,12 +35,32 @@ sealed trait Check[E, A] {
   }
 }
 
+object Predicate {
+  final case class Or[E, A](left: Predicate[E, A], right: Predicate[E, A]) extends Predicate[E, A]
+
+  final case class And[E, A](left: Predicate[E, A], right: Predicate[E, A]) extends Predicate[E, A]
+
+  final case class Pure[E, A](func: A => Validated[E, A]) extends Predicate[E, A]
+
+  def pure[E, A](f: A => Validated[E, A]): Predicate[E, A] = Pure(f)
+}
+
+sealed trait Check[E, A, B] {
+  import Check._
+
+  def apply(a: A)(implicit s: Semigroup[E]): Validated[E, B]
+
+  def map[C](f: B => C): Check[E, A, C] = Map[E, A, B, C](this, f)
+}
+
 object Check {
-  final case class Or[E, A](left: Check[E, A], right: Check[E, A]) extends Check[E, A]
+  final case class Map[E, A, B, C](check: Check[E, A, B], f: B => C) extends Check[E, A, C] {
+    def apply(a: A)(implicit s: Semigroup[E]): Validated[E, C] = check(a).map(f)
+  }
 
-  final case class And[E, A](left: Check[E, A], right: Check[E, A]) extends Check[E, A]
+  final case class Pure[E, A](p: Predicate[E, A]) extends Check[E, A, A] {
+    def apply(a: A)(implicit s: Semigroup[E]): Validated[E, A] = p(a)
+  }
 
-  final case class Pure[E, A](func: A => Validated[E, A]) extends Check[E, A]
-
-  def pure[E, A](f: A => Validated[E, A]): Check[E, A] = Pure(f)
+  def apply[E, A](p: Predicate[E, A]): Check[E, A, A] = Pure(p)
 }
