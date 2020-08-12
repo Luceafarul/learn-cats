@@ -28,6 +28,7 @@ class DataValidationSpec extends WordSpec with Matchers {
 
   "Predicate" should {
     import Predicate._
+
     "validate and combine an errors with and function" in {
       val a: Predicate[List[String], Int] = Pure { v =>
         if (v > 2) Valid(v)
@@ -76,6 +77,62 @@ class DataValidationSpec extends WordSpec with Matchers {
 
       check(5) shouldBe Valid(5)
       check(0) shouldBe Invalid(List("Must be > 2", "Must be < -2"))
+    }
+  }
+
+  "Check" should {
+    import Predicate._
+
+    "transform Check value with map if it's valid or return error" in {
+      val a: Predicate[List[String], Int] = Pure { v =>
+        if (v > 2) Valid(v)
+        else Invalid(List("Must be > 2"))
+      }
+
+      val check: Check[List[String], Int, Int] = Check(a).map((x: Int) => x * 2)
+
+      check(5) shouldBe Valid(10)
+      check(1) shouldBe Invalid(List("Must be > 2"))
+    }
+
+    "transform Check value with flatMap if it's valid or return error" in {
+      val a: Predicate[List[String], Int] = Pure { v =>
+        if (v > 2) Valid(v)
+        else Invalid(List("Must be > 2"))
+      }
+
+      val b: Predicate[List[String], Int] = Pure { v =>
+        if (v < 10) Valid(v)
+        else Invalid(List("Must be < 10"))
+      }
+
+      val check1: Check[List[String], Int, Int] = Check(a)
+      val check2: Check[List[String], Int, Int] = Check(b)
+
+      val check: Check[List[String], Int, Int] = check1.flatMap((x: Int) => check2)
+
+      check(5) shouldBe Valid(5)
+      check(11) shouldBe Invalid(List("Must be < 10"))
+    }
+
+    "apply two Checks with andThen or return error" in {
+      val a: Predicate[List[String], Int] = Pure { v =>
+        if (v > 2) Valid(v)
+        else Invalid(List("Must be > 2"))
+      }
+
+      val b: Predicate[List[String], Int] = Pure { v =>
+        if (v < 10) Valid(v)
+        else Invalid(List("Must be < 10"))
+      }
+
+      val check1: Check[List[String], Int, Int] = Check(a)
+      val check2: Check[List[String], Int, Int] = Check(b)
+
+      val check: Check[List[String], Int, Int] = check1.andThen(check2)
+
+      check(5) shouldBe Valid(5)
+      check(1) shouldBe Invalid(List("Must be > 2"))
     }
   }
 }
