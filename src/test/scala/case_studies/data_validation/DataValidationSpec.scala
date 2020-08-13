@@ -2,6 +2,7 @@ package case_studies.data_validation
 
 import cats.data.Validated
 import cats.data.Validated._
+import cats.data.NonEmptyList
 import cats.syntax.either._
 import cats.instances.list._
 import org.scalatest.{WordSpec, Matchers}
@@ -109,7 +110,8 @@ class DataValidationSpec extends WordSpec with Matchers {
       val check1: Check[List[String], Int, Int] = Check(a)
       val check2: Check[List[String], Int, Int] = Check(b)
 
-      val check: Check[List[String], Int, Int] = check1.flatMap((x: Int) => check2)
+      val check: Check[List[String], Int, Int] =
+        check1.flatMap((x: Int) => check2)
 
       check(5) shouldBe Valid(5)
       check(11) shouldBe Invalid(List("Must be < 10"))
@@ -133,6 +135,23 @@ class DataValidationSpec extends WordSpec with Matchers {
 
       check(5) shouldBe Valid(5)
       check(1) shouldBe Invalid(List("Must be > 2"))
+    }
+  }
+
+  "UserValidation" should {
+    "validate user name correct" in {
+      val validUsername = "Val1d"
+      val invalidUsername1 = "no"
+      val invalidUsername2 = "|!d"
+
+      UserValidation.usernameValidator(validUsername) shouldBe Valid(validUsername)
+      UserValidation.usernameValidator(invalidUsername1) shouldBe Invalid(NonEmptyList.of("Must be longer than 4 characters"))
+      UserValidation.usernameValidator(invalidUsername2) shouldBe Invalid(
+        NonEmptyList.of(
+          "Must be longer than 4 characters",
+          "Must be all alphanumeric characters"
+        )
+      )
     }
   }
 }
