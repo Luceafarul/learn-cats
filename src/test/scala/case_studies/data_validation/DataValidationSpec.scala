@@ -169,5 +169,15 @@ class DataValidationSpec extends WordSpec with Matchers {
         NonEmptyList.of("Must be longer than 3 characters", "Must contain the character: .")
       )
     }
+
+    "user validate correctly" in {
+      import UserValidation.User
+
+      val marcus = UserValidation.createUser("Marcus", "maarcus@test.com")
+      val invalidUser = UserValidation.createUser("", "ivalid@user.com@user.com")
+
+      marcus shouldBe Valid(User("Marcus", "maarcus@test.com"))
+      invalidUser shouldBe Invalid(NonEmptyList.of("Must be longer than 4 characters", "Must contain a single @ char"))
+    }
   }
 }

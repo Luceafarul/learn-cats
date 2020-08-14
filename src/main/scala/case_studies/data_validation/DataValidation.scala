@@ -139,4 +139,9 @@ object UserValidation {
   }
 
   val emailValidator: Check[Errors, String, String] = splitEmail andThen joinEmail
+
+  final case class User(name: String, email: String)
+
+  def createUser(name: String, email: String): Validated[Errors, User] = 
+    (usernameValidator(name), emailValidator(email)).mapN(User)
 }
