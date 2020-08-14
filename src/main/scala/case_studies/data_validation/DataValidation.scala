@@ -45,8 +45,7 @@ object Predicate {
   final case class And[E, A](left: Predicate[E, A], right: Predicate[E, A])
       extends Predicate[E, A]
 
-  final case class Pure[E, A](func: A => Validated[E, A])
-      extends Predicate[E, A]
+  final case class Pure[E, A](func: A => Validated[E, A]) extends Predicate[E, A]
 
   def apply[E, A](f: A => Validated[E, A]): Predicate[E, A] = Pure(f)
 
@@ -61,46 +60,37 @@ sealed trait Check[E, A, B] {
 
   def map[C](f: B => C): Check[E, A, C] = Map[E, A, B, C](this, f)
 
-  def flatMap[C](f: B => Check[E, A, C]): Check[E, A, C] =
-    FlatMap[E, A, B, C](this, f)
+  def flatMap[C](f: B => Check[E, A, C]): Check[E, A, C] = FlatMap[E, A, B, C](this, f)
 
-  def andThen[C](that: Check[E, B, C]): Check[E, A, C] =
-    AndThen[E, A, B, C](this, that)
+  def andThen[C](that: Check[E, B, C]): Check[E, A, C] = AndThen[E, A, B, C](this, that)
 }
 
 object Check {
-  final case class Map[E, A, B, C](check: Check[E, A, B], f: B => C)
-      extends Check[E, A, C] {
+  final case class Map[E, A, B, C](check: Check[E, A, B], f: B => C) extends Check[E, A, C] {
     def apply(a: A)(implicit s: Semigroup[E]): Validated[E, C] = check(a).map(f)
   }
 
-  final case class FlatMap[E, A, B, C](
-      check: Check[E, A, B],
-      f: B => Check[E, A, C]
-  ) extends Check[E, A, C] {
+  final case class FlatMap[E, A, B, C](check: Check[E, A, B], f: B => Check[E, A, C]) extends Check[E, A, C] {
     def apply(a: A)(implicit s: Semigroup[E]): Validated[E, C] =
       check(a).withEither(e => e.flatMap(b => f(b)(a).toEither))
   }
 
-  final case class AndThen[E, A, B, C](
-      check1: Check[E, A, B],
-      check2: Check[E, B, C]
-  ) extends Check[E, A, C] {
+  final case class AndThen[E, A, B, C](check1: Check[E, A, B], check2: Check[E, B, C]) extends Check[E, A, C] {
     def apply(a: A)(implicit s: Semigroup[E]): Validated[E, C] =
       check1(a).withEither(e => e.flatMap(b => check2(b).toEither))
   }
 
-  final case class Pure[E, A, B](f: A => Validated[E, B])
-      extends Check[E, A, B] {
+  final case class Pure[E, A, B](f: A => Validated[E, B]) extends Check[E, A, B] {
     def apply(a: A)(implicit s: Semigroup[E]): Validated[E, B] = f(a)
   }
 
-  final case class PurePredicate[E, A](p: Predicate[E, A])
-      extends Check[E, A, A] {
+  final case class PurePredicate[E, A](p: Predicate[E, A]) extends Check[E, A, A] {
     def apply(a: A)(implicit s: Semigroup[E]): Validated[E, A] = p(a)
   }
 
   def apply[E, A](p: Predicate[E, A]): Check[E, A, A] = PurePredicate(p)
+
+  def apply[E, A, B](f: A => Validated[E, B]): Check[E, A, B] = Pure(f)
 }
 
 object UserValidation {
@@ -133,5 +123,20 @@ object UserValidation {
   val usernameValidator: Check[Errors, String, String] =
     Check(longerThan(4).and(alphanumeric))
 
-  val emailValidator: Check[Errors, String, String] = ???
+  val splitEmail: Check[Errors, String, (String, String)] = Check(email =>
+    email.split('@') match {
+      case Array(name, domain) => (name, domain).validNel[String]
+      case _ => "Must contain a single @ char".invalidNel[(String, String)]
+    }
+  )
+
+  val checkLeft: Check[Errors, String, String] = Check(longerThan(0))
+
+  val checkRight: Check[Errors, String, String] = Check(longerThan(3).and(contains('.')))
+
+  val joinEmail: Check[Errors, (String, String), String] = Check {
+    case (left, right) => (checkLeft(left), checkRight(right)).mapN(_ + "@" + _)
+  }
+
+  val emailValidator: Check[Errors, String, String] = splitEmail andThen joinEmail
 }

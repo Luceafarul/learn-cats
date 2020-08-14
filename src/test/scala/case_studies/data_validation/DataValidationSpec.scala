@@ -153,5 +153,21 @@ class DataValidationSpec extends WordSpec with Matchers {
         )
       )
     }
+
+    "validate user email correct" in {
+      val validEmail = "hello@dark.ness"
+      val invalidEmail01 = "@test.com"
+      val invalidEmail02 = "inv@t.c"
+      val invalidEmail03 = "invt.c"
+      val invalidEmail04 = "inv@tc"
+
+      UserValidation.emailValidator(validEmail) shouldBe Valid(validEmail)
+      UserValidation.emailValidator(invalidEmail01) shouldBe Invalid(NonEmptyList.of("Must be longer than 0 characters"))
+      UserValidation.emailValidator(invalidEmail02) shouldBe Invalid(NonEmptyList.of("Must be longer than 3 characters"))
+      UserValidation.emailValidator(invalidEmail03) shouldBe Invalid(NonEmptyList.of("Must contain a single @ char"))
+      UserValidation.emailValidator(invalidEmail04) shouldBe Invalid(
+        NonEmptyList.of("Must be longer than 3 characters", "Must contain the character: .")
+      )
+    }
   }
 }
