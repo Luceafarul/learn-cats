@@ -1,6 +1,7 @@
 package case_studies.data_validation
 
 import cats.Monad
+import cats.data.Kleisli
 import cats.data.Validated
 import cats.data.Validated._
 import cats.kernel.Semigroup
@@ -32,8 +33,6 @@ sealed trait Predicate[E, A] {
   def or(that: Predicate[E, A]): Predicate[E, A] = Or(this, that)
 
   def run(a: A)(implicit s: Semigroup[E]): Either[E, A] = apply(a).toEither
-  // Solution:
-  // def run(implicit s: Semigroup[E]): A => Either[E, A] = (a: A) => this(a).toEither
 
   def apply(a: A)(implicit s: Semigroup[E]): Validated[E, A] = this match {
     case Pure(func)       => func(a)
@@ -57,50 +56,20 @@ object Predicate {
     Pure(a => if (f(a)) a.valid else error.invalid)
 }
 
-sealed trait Check[E, A, B] {
-  import Check._
-
-  def apply(a: A)(implicit s: Semigroup[E]): Validated[E, B]
-
-  def map[C](f: B => C): Check[E, A, C] = Map[E, A, B, C](this, f)
-
-  def flatMap[C](f: B => Check[E, A, C]): Check[E, A, C] = FlatMap[E, A, B, C](this, f)
-
-  def andThen[C](that: Check[E, B, C]): Check[E, A, C] = AndThen[E, A, B, C](this, that)
-}
-
-object Check {
-  final case class Map[E, A, B, C](check: Check[E, A, B], f: B => C) extends Check[E, A, C] {
-    def apply(a: A)(implicit s: Semigroup[E]): Validated[E, C] = check(a).map(f)
-  }
-
-  final case class FlatMap[E, A, B, C](check: Check[E, A, B], f: B => Check[E, A, C]) extends Check[E, A, C] {
-    def apply(a: A)(implicit s: Semigroup[E]): Validated[E, C] =
-      check(a).withEither(e => e.flatMap(b => f(b)(a).toEither))
-  }
-
-  final case class AndThen[E, A, B, C](check1: Check[E, A, B], check2: Check[E, B, C]) extends Check[E, A, C] {
-    def apply(a: A)(implicit s: Semigroup[E]): Validated[E, C] =
-      check1(a).withEither(e => e.flatMap(b => check2(b).toEither))
-  }
-
-  final case class Pure[E, A, B](f: A => Validated[E, B]) extends Check[E, A, B] {
-    def apply(a: A)(implicit s: Semigroup[E]): Validated[E, B] = f(a)
-  }
-
-  final case class PurePredicate[E, A](p: Predicate[E, A]) extends Check[E, A, A] {
-    def apply(a: A)(implicit s: Semigroup[E]): Validated[E, A] = p(a)
-  }
-
-  def apply[E, A](p: Predicate[E, A]): Check[E, A, A] = PurePredicate(p)
-
-  def apply[E, A, B](f: A => Validated[E, B]): Check[E, A, B] = Pure(f)
-}
-
 object UserValidation {
   import cats.data.{NonEmptyList, Validated}
 
   type Errors = NonEmptyList[String]
+
+  type Result[A] = Either[Errors, A]
+
+  type Check[A, B] = Kleisli[Result, A, B]
+
+  // Create a check from a function:
+  def check[A, B](func: A => Result[B]): Check[A, B] = Kleisli(func)
+
+  // Create a check from Predicate:
+  def checkPredicate[A](pred: Predicate[Errors, A]): Check[A, A] = Kleisli[Result, A, A](pred.run)
 
   def error(error: String): NonEmptyList[String] = NonEmptyList(error, Nil)
 
@@ -124,28 +93,29 @@ object UserValidation {
     s => s.filter(_ == char).size == 1
   )
 
-  val usernameValidator: Check[Errors, String, String] =
-    Check(longerThan(4).and(alphanumeric))
+  val usernameValidator: Check[String, String] =
+    checkPredicate(longerThan(4).and(alphanumeric))
 
-  val splitEmail: Check[Errors, String, (String, String)] = Check(email =>
+  val splitEmail: Check[String, (String, String)] = check(email =>
     email.split('@') match {
-      case Array(name, domain) => (name, domain).validNel[String]
-      case _ => "Must contain a single @ char".invalidNel[(String, String)]
+      case Array(name, domain) => Right((name, domain))
+      case _ => Left(error("Must contain a single @ char"))
     }
   )
 
-  val checkLeft: Check[Errors, String, String] = Check(longerThan(0))
+  val checkLeft: Check[String, String] = checkPredicate(longerThan(0))
 
-  val checkRight: Check[Errors, String, String] = Check(longerThan(3).and(contains('.')))
+  val checkRight: Check[String, String] = checkPredicate(longerThan(3).and(contains('.')))
 
-  val joinEmail: Check[Errors, (String, String), String] = Check {
+  val joinEmail: Check[(String, String), String] = check {
     case (left, right) => (checkLeft(left), checkRight(right)).mapN(_ + "@" + _)
   }
 
-  val emailValidator: Check[Errors, String, String] = splitEmail andThen joinEmail
+  val emailValidator: Check[String, String] = splitEmail andThen joinEmail
 
   final case class User(name: String, email: String)
 
-  def createUser(name: String, email: String): Validated[Errors, User] = 
-    (usernameValidator(name), emailValidator(email)).mapN(User)
+  // TODO: why errors does not accumulate into List?
+  def createUser(name: String, email: String): Either[Errors, User] = 
+    (usernameValidator.run(name), emailValidator.run(email)).mapN(User)
 }

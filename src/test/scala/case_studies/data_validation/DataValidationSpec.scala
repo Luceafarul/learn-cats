@@ -81,72 +81,19 @@ class DataValidationSpec extends WordSpec with Matchers {
     }
   }
 
-  "Check" should {
-    import Predicate._
-
-    "transform Check value with map if it's valid or return error" in {
-      val a: Predicate[List[String], Int] = Pure { v =>
-        if (v > 2) Valid(v)
-        else Invalid(List("Must be > 2"))
-      }
-
-      val check: Check[List[String], Int, Int] = Check(a).map((x: Int) => x * 2)
-
-      check(5) shouldBe Valid(10)
-      check(1) shouldBe Invalid(List("Must be > 2"))
-    }
-
-    "transform Check value with flatMap if it's valid or return error" in {
-      val a: Predicate[List[String], Int] = Pure { v =>
-        if (v > 2) Valid(v)
-        else Invalid(List("Must be > 2"))
-      }
-
-      val b: Predicate[List[String], Int] = Pure { v =>
-        if (v < 10) Valid(v)
-        else Invalid(List("Must be < 10"))
-      }
-
-      val check1: Check[List[String], Int, Int] = Check(a)
-      val check2: Check[List[String], Int, Int] = Check(b)
-
-      val check: Check[List[String], Int, Int] =
-        check1.flatMap((x: Int) => check2)
-
-      check(5) shouldBe Valid(5)
-      check(11) shouldBe Invalid(List("Must be < 10"))
-    }
-
-    "apply two Checks with andThen or return error" in {
-      val a: Predicate[List[String], Int] = Pure { v =>
-        if (v > 2) Valid(v)
-        else Invalid(List("Must be > 2"))
-      }
-
-      val b: Predicate[List[String], Int] = Pure { v =>
-        if (v < 10) Valid(v)
-        else Invalid(List("Must be < 10"))
-      }
-
-      val check1: Check[List[String], Int, Int] = Check(a)
-      val check2: Check[List[String], Int, Int] = Check(b)
-
-      val check: Check[List[String], Int, Int] = check1.andThen(check2)
-
-      check(5) shouldBe Valid(5)
-      check(1) shouldBe Invalid(List("Must be > 2"))
-    }
-  }
-
   "UserValidation" should {
     "validate user name correct" in {
       val validUsername = "Val1d"
       val invalidUsername1 = "no"
       val invalidUsername2 = "|!d"
 
-      UserValidation.usernameValidator(validUsername) shouldBe Valid(validUsername)
-      UserValidation.usernameValidator(invalidUsername1) shouldBe Invalid(NonEmptyList.of("Must be longer than 4 characters"))
-      UserValidation.usernameValidator(invalidUsername2) shouldBe Invalid(
+      UserValidation.usernameValidator(validUsername) shouldBe Right(
+        validUsername
+      )
+      UserValidation.usernameValidator(invalidUsername1) shouldBe Left(
+        NonEmptyList.of("Must be longer than 4 characters")
+      )
+      UserValidation.usernameValidator(invalidUsername2) shouldBe Left(
         NonEmptyList.of(
           "Must be longer than 4 characters",
           "Must be all alphanumeric characters"
@@ -161,12 +108,21 @@ class DataValidationSpec extends WordSpec with Matchers {
       val invalidEmail03 = "invt.c"
       val invalidEmail04 = "inv@tc"
 
-      UserValidation.emailValidator(validEmail) shouldBe Valid(validEmail)
-      UserValidation.emailValidator(invalidEmail01) shouldBe Invalid(NonEmptyList.of("Must be longer than 0 characters"))
-      UserValidation.emailValidator(invalidEmail02) shouldBe Invalid(NonEmptyList.of("Must be longer than 3 characters"))
-      UserValidation.emailValidator(invalidEmail03) shouldBe Invalid(NonEmptyList.of("Must contain a single @ char"))
-      UserValidation.emailValidator(invalidEmail04) shouldBe Invalid(
-        NonEmptyList.of("Must be longer than 3 characters", "Must contain the character: .")
+      UserValidation.emailValidator(validEmail) shouldBe Right(validEmail)
+      UserValidation.emailValidator(invalidEmail01) shouldBe Left(
+        NonEmptyList.of("Must be longer than 0 characters")
+      )
+      UserValidation.emailValidator(invalidEmail02) shouldBe Left(
+        NonEmptyList.of("Must be longer than 3 characters")
+      )
+      UserValidation.emailValidator(invalidEmail03) shouldBe Left(
+        NonEmptyList.of("Must contain a single @ char")
+      )
+      UserValidation.emailValidator(invalidEmail04) shouldBe Left(
+        NonEmptyList.of(
+          "Must be longer than 3 characters",
+          "Must contain the character: ."
+        )
       )
     }
 
@@ -174,10 +130,16 @@ class DataValidationSpec extends WordSpec with Matchers {
       import UserValidation.User
 
       val marcus = UserValidation.createUser("Marcus", "maarcus@test.com")
-      val invalidUser = UserValidation.createUser("", "ivalid@user.com@user.com")
+      val invalidUser =
+        UserValidation.createUser("", "ivalid@user.com@user.com")
 
-      marcus shouldBe Valid(User("Marcus", "maarcus@test.com"))
-      invalidUser shouldBe Invalid(NonEmptyList.of("Must be longer than 4 characters", "Must contain a single @ char"))
+      marcus shouldBe Right(User("Marcus", "maarcus@test.com"))
+      invalidUser shouldBe Left(
+        NonEmptyList.of(
+          "Must be longer than 4 characters",
+          "Must contain a single @ char"
+        )
+      )
     }
   }
 }
