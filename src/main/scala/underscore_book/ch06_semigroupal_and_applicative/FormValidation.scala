@@ -37,9 +37,7 @@ object FormValidation {
     catch { case _: NumberFormatException => Left(List(s"Can not parse $s to Int")) }
 
   def nonBlank(s: String): FieldValidation[String] =
-    Right(s).ensure(List("name field should be non empty"))(s =>
-      !s.isBlank && s.nonEmpty
-    )
+    Right(s).ensure(List("name field should be non empty"))(_.nonEmpty)
 
   def nonNegative(n: Int): FieldValidation[Int] =
     Right(n).ensure(List("age should be greater than zero"))(n => n > 0)
