@@ -18,6 +18,10 @@ object TypeClassExample extends App {
     def combine(x: A, y: A): A
   }
 
+  object Monoid {
+    def apply[A: Monoid]: Monoid[A] = implicitly[Monoid[A]]
+  }
+
   // Add monoid implementation for Int
   implicit val indAdditionMonoid: Monoid[Int] = new Monoid[Int] {
     override def empty: Int = 0
@@ -45,8 +49,8 @@ object TypeClassExample extends App {
   }
 
   // We can now write the functions above against this interface.
-  def combineAll[A](list: List[A])(implicit monoid: Monoid[A]): A =
-    list.foldRight(monoid.empty)(monoid.combine)
+  def combineAll[A: Monoid](list: List[A]): A =
+    list.foldRight(Monoid[A].empty)(Monoid[A].combine)
 
   implicit val stringMonoid: Monoid[String] = new Monoid[String] {
     override def empty: String = ""
