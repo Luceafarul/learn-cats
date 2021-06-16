@@ -14,3 +14,5 @@ lazy val root = (project in file("."))
       catsEffect
     )
   )
+
+addCompilerPlugin("org.typelevel" % "kind-projector" % "0.11.3" cross CrossVersion.full)
