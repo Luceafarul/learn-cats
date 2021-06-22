@@ -72,4 +72,18 @@ object ApplyExample extends App {
 
   println(option2.tupled)
   println(option3.tupled)
+
+  val f: (Int, Char) => Double = (i, c) => (i + c).toDouble
+
+  val someInt: Option[Int] = Some(7)
+  val someChar: Option[Char] = Some('a')
+
+  val res1: Option[Char => Double] = someInt.map { i => (c: Char) => f(i, c) }
+
+  val res2: Option[Double] = res1.flatMap(f => someChar.map(c => f(c)))
+  val res3: Option[Double] = res1.ap(someChar)
+
+  println(res1)
+  println(res2)
+  println(res3)
 }
