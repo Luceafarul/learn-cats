@@ -1,7 +1,7 @@
 package cats_docs.doc04_applicative
 
-import cats.{Applicative, Functor, Semigroupal}
 import cats.implicits._
+import cats.{Applicative, Functor}
 
 import scala.concurrent.Await
 
@@ -46,8 +46,9 @@ object ApplicativeExample extends App {
   // Applicative compose
   import cats.data.Nested
   import cats.implicits._
-  import scala.concurrent.Future
+
   import scala.concurrent.ExecutionContext.Implicits.global
+  import scala.concurrent.Future
 
   val x: Future[Option[Int]] = Future.successful(Some(5))
   val y: Future[Option[Char]] = Future.successful(Some('a'))
