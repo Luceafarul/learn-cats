@@ -43,6 +43,8 @@ object FoldableExample extends App {
   println("\nfoldK examples:")
   println(Foldable[List].foldK(List(List(1, 2), List(3, 4, 5))))
   println(Foldable[List].foldK(List(None, Option("two"), Option("three"))))
+  println(Option.when(cond = true)(List(1, 2, 3)).foldK)
+  println(Option.when(cond = false)(List(1, 2, 3)).foldK)
 
   // find - searches for the first element matching the predicate, if one exists.
   println("\nfind examples:")
@@ -86,13 +88,38 @@ object FoldableExample extends App {
   // compose - compose Foldable[F[_]] and Foldable[G[_]] instances to obtain Foldable[F[G]].
   println("\ncompose examples:")
   val foldableListOption = Foldable[List].compose[Option]
-  println(foldableListOption.fold(List(Option(1), Option(2), Option(3), Option(4), Option(5))))
-  println(foldableListOption.fold(List(Option("1"), Option("2"), None, Option("4"), Option("5"))))
-  println(foldableListOption.fold(List(Option(1), None, None, Option(4), Option(5))))
+  println(
+    foldableListOption
+      .fold(List(Option(1), Option(2), Option(3), Option(4), Option(5)))
+  )
+  println(
+    foldableListOption
+      .fold(List(Option("1"), Option("2"), None, Option("4"), Option("5")))
+  )
+  println(
+    foldableListOption.fold(List(Option(1), None, None, Option(4), Option(5)))
+  )
 
   // More Foldable methods
   println("\nother Foldable methods examples:")
   println(Foldable[List].isEmpty(List(1, 2, 3)))
   println(Foldable[List].dropWhile_(List(1, 2, 3))(_ < 2))
   println(Foldable[List].takeWhile_(List(1, 2, 3))(_ < 2))
+
+  // foldA
+  final case class Person(name: String)
+  object Person {
+    implicit val monoidPerson: Monoid[Person] = new Monoid[Person] {
+      def empty: Person = Person("")
+      def combine(x: Person, y: Person): Person = Person(x.name + y.name)
+    }
+  }
+  println("\nfoldA examples:")
+  println(Option(List(1, 2, 3)).foldA)
+  println(Option.when(cond = true)(List(1, 2)).foldA)
+  println(Option.when(cond = true)(List(Person("Ann"), Person("Mike"))).foldA)
+  println(Option.when(cond = false)(List(1, 2)).foldA)
+  println(Option.when(cond = false)(List(Person("Ann"), Person("Mike"))).foldA)
+  println(Option(List.empty[Int]).foldA)
+  println(Option.empty[List[Int]].foldA)
 }
