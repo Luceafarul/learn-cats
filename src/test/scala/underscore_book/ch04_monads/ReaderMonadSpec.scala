@@ -4,7 +4,7 @@ import org.scalatest.{WordSpec, Matchers}
 
 class ReaderMonadSpec extends WordSpec with Matchers {
   "ReaderMonad" should {
-    import ReaderMonad._
+    import book.ch04_monads.ReaderMonad._
     val users = Map(1 -> "dade", 2 -> "kate", 3 -> "margo")
     val passwords = Map("dade" -> "zerocool", "kate" -> "acidburn", "margo" -> "secret")
     val db = Db(users, passwords)

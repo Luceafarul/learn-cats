@@ -1,8 +1,9 @@
 package underscore_book.ch03_functors
 
+import book.ch03_functors.{Box, Branch, Leaf, Tree}
 import cats.Functor
 import cats.syntax.functor._
-import org.scalatest.{WordSpec, Matchers}
+import org.scalatest.{Matchers, WordSpec}
 
 class CustomFunctorSpec extends WordSpec with Matchers {
   "CustomFunctor" should {

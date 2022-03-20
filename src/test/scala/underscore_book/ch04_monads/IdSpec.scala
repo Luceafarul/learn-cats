@@ -1,5 +1,6 @@
 package underscore_book.ch04_monads
 
+import book.ch04_monads.Id
 import cats.Id
 import org.scalatest.{Matchers, WordSpec}
 

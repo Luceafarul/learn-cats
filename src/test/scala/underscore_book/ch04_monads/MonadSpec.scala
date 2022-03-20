@@ -1,6 +1,7 @@
 package underscore_book.ch04_monads
 
-import org.scalatest.{WordSpec, Matchers}
+import book.ch04_monads.Monads
+import org.scalatest.{Matchers, WordSpec}
 
 class MonadSpec extends WordSpec with Matchers {
   "Monad" should {

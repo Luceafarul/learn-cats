@@ -5,8 +5,8 @@ import org.scalatest.{WordSpec, Matchers}
 class MonoidSpec extends WordSpec with Matchers {
   "Monoid Set" should {
     "return union of two Int ets" in {
-      import underscore_book.ch02_monoids_and_semigroups.Monoid
-      import underscore_book.ch02_monoids_and_semigroups.SetMonoid.unionMonoid
+      import book.ch02_monoids_and_semigroups.Monoid
+      import book.ch02_monoids_and_semigroups.SetMonoid.unionMonoid
 
       val intSetMonoid = Monoid[Set[Int]]
       val set01 = Set(1, 2, 3)
@@ -18,8 +18,8 @@ class MonoidSpec extends WordSpec with Matchers {
     }
 
     "return union of two String sets" in {
-      import underscore_book.ch02_monoids_and_semigroups.Monoid
-      import underscore_book.ch02_monoids_and_semigroups.SetMonoid.unionMonoid
+      import book.ch02_monoids_and_semigroups.Monoid
+      import book.ch02_monoids_and_semigroups.SetMonoid.unionMonoid
 
       val stringSetMonoid = Monoid[Set[String]]
       val set01 = Set("A", "B", "C")

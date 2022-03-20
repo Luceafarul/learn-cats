@@ -8,7 +8,7 @@ import org.scalatest.Succeeded
 
 class LoggedMonadSpec extends AsyncWordSpec with Matchers {
   "LoggedMonad" should {
-    import LoggedMonad._
+    import book.ch04_monads.LoggedMonad._
 
     "return logged messages and result of factorial" in {
       val res = factorial(5)

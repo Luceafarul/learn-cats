@@ -5,7 +5,7 @@ import org.scalatest.{WordSpec, Matchers}
 
 class PostOrderCalculatorSpec extends WordSpec with Matchers {
   "PostOrderCalculator" should {
-    import PostOrderCalculator._
+    import book.ch04_monads.PostOrderCalculator._
 
     "evaluate one symbol with evalOne method" in {
       val result = evalOne("123").runA(Nil).value

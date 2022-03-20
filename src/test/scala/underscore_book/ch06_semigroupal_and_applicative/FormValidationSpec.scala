@@ -6,7 +6,7 @@ import cats.data.Validated.Valid
 import cats.data.Validated.Invalid
 
 class FormValidationSpec extends WordSpec with Matchers {
-  import FormValidation._
+  import book.ch06_semigroupal_and_applicative.FormValidation._
 
   "FormValidation" should {
     "getValue return value or error message if key does not exist" in {

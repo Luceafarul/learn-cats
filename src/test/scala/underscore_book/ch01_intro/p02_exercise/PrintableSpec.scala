@@ -1,13 +1,15 @@
 package underscore_book.ch01_intro.p02_exercise
 
-import underscore_book.ch01_intro.p01_anatomy_of_type_class.Person
+import book.ch01_intro.p01_anatomy_of_type_class.Person
+import book.ch01_intro.p02_exercise.Printable
+import book.ch03_functors.Box
 import underscore_book.ch03_functors._
 import org.scalatest.{FlatSpec, Matchers}
 
 class PrintableSpec extends FlatSpec with Matchers with SpecHelper {
 
-  import underscore_book.ch01_intro.p02_exercise.PrintableSyntax._
-  import underscore_book.ch01_intro.p02_exercise.PrintableInstances._
+  import book.ch01_intro.p02_exercise.PrintableSyntax._
+  import book.ch01_intro.p02_exercise.PrintableInstances._
 
   "Printable format" should "accept Int and return String representation" in {
     Printable.format(173) shouldBe "173"

@@ -7,7 +7,7 @@ import org.scalatest.{AsyncWordSpec, Matchers}
 
 class TransformersSpec extends AsyncWordSpec with Matchers {
   "Transformers" should {
-    import underscore_book.ch05_monad_transformers.exercise.Transformers._
+    import book.ch05_monad_transformers.exercise.Transformers._
 
     "return power level if autobot exist" in {
       powerLevel("Jazz").value.map { f => f shouldBe Right(6) }

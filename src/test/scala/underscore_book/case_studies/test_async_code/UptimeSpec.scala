@@ -1,6 +1,7 @@
 package underscore_book.case_studies.test_async_code
 
-import org.scalatest.{WordSpec, Matchers}
+import book.case_studies.test_async_code.{TestUptimeClient, UptimeService}
+import org.scalatest.{Matchers, WordSpec}
 
 class UptimeSpec extends WordSpec with Matchers {
   "Uptime" should {

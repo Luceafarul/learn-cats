@@ -7,7 +7,7 @@ class OptionMonadSpec extends WordSpec with Matchers {
   final case class Person(name: String, age: Int)
 
   "OptionMonad" should {
-    import OptionMonad._
+    import book.ch04_monads.OptionMonad._
 
     "wrap value with pure method" in {
       val person = Person("Marcus", 73)

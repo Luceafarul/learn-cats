@@ -1,8 +1,10 @@
 package underscore_book.case_studies.map_reduce
 
+import book.case_studies.map_reduce.MapReduce
 import cats.instances.string._
 import cats.instances.int._
-import org.scalatest.{WordSpec, Matchers}
+import org.scalatest.{Matchers, WordSpec}
+
 import scala.concurrent._
 import scala.concurrent.duration._
 

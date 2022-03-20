@@ -1,7 +1,7 @@
 package underscore_book.ch04_monads
 
-import underscore_book.ch03_functors.Tree
-import underscore_book.ch03_functors.Tree._
+import book.ch03_functors.Tree
+import Tree._
 import cats.syntax.applicative._
 import org.scalatest.{WordSpec, Matchers}
 

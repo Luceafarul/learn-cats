@@ -1,11 +1,12 @@
 package underscore_book.case_studies.data_validation
 
+import book.case_studies.data_validation.{CheckF, Predicate, UserValidation}
 import cats.data.Validated
 import cats.data.Validated._
 import cats.data.NonEmptyList
 import cats.syntax.either._
 import cats.instances.list._
-import org.scalatest.{WordSpec, Matchers}
+import org.scalatest.{Matchers, WordSpec}
 
 class DataValidationSpec extends WordSpec with Matchers {
   "CheckF" should {
@@ -28,7 +29,7 @@ class DataValidationSpec extends WordSpec with Matchers {
   }
 
   "Predicate" should {
-    import Predicate._
+    import book.case_studies.data_validation.Predicate._
 
     "validate and combine an errors with and function" in {
       val a: Predicate[List[String], Int] = Pure { v =>
@@ -127,7 +128,7 @@ class DataValidationSpec extends WordSpec with Matchers {
     }
 
     "user validate correctly" in {
-      import UserValidation.User
+      import book.case_studies.data_validation.UserValidation.User
 
       val marcus = UserValidation.createUser("Marcus", "maarcus@test.com")
       val invalidUser =
