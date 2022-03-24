@@ -1,9 +1,10 @@
 package underscore_book.ch01_intro.p02_exercise
 
 import cats.Show
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class ShowSpec extends FlatSpec with Matchers with SpecHelper {
+class ShowSpec extends AnyFlatSpec with Matchers with SpecHelper {
 
   import cats.syntax.show._
 

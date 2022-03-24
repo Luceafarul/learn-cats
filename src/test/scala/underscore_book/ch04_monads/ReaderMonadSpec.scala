@@ -1,8 +1,9 @@
 package underscore_book.ch04_monads
 
-import org.scalatest.{WordSpec, Matchers}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
-class ReaderMonadSpec extends WordSpec with Matchers {
+class ReaderMonadSpec extends AnyWordSpec with Matchers {
   "ReaderMonad" should {
     import book.ch04_monads.ReaderMonad._
     val users = Map(1 -> "dade", 2 -> "kate", 3 -> "margo")

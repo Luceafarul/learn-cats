@@ -3,9 +3,10 @@ package underscore_book.ch04_monads
 import book.ch03_functors.Tree
 import Tree._
 import cats.syntax.applicative._
-import org.scalatest.{WordSpec, Matchers}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
-class CustomMonadSpec extends WordSpec with Matchers {
+class CustomMonadSpec extends AnyWordSpec with Matchers {
   final case class Person(name: String, age: Int)
 
   "TreeMonad" should {

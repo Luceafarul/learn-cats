@@ -1,10 +1,9 @@
 package underscore_book.ch04_monads
 
-import org.scalatest.{AsyncWordSpec, Matchers, Assertions}
-
 import scala.concurrent._
-import scala.concurrent.duration._
 import org.scalatest.Succeeded
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AsyncWordSpec
 
 class LoggedMonadSpec extends AsyncWordSpec with Matchers {
   "LoggedMonad" should {

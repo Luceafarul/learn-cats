@@ -5,9 +5,10 @@ import cats.syntax.eq._
 import cats.instances.int._
 import cats.instances.string._
 import cats.instances.option._
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class EqSpec extends FlatSpec with Matchers with SpecHelper {
+class EqSpec extends AnyFlatSpec with Matchers with SpecHelper {
 
   "Eq[Cat]" should "return equality and inequality of two instances" in {
     implicit val catEq: Eq[Cat] = (cat1, cat2) => {

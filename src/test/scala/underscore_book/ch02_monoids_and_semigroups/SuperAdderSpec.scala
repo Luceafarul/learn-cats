@@ -5,9 +5,10 @@ import cats.Monoid
 import cats.instances.int._
 import cats.instances.option._
 import cats.syntax.semigroup._
-import org.scalatest.{WordSpec, Matchers}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
-class SuperAdderSpec extends WordSpec with Matchers {
+class SuperAdderSpec extends AnyWordSpec with Matchers {
   "SuperAdder" should {
     "add all elements of int list" in {
       val list = List(1, 2, 3, 4, 5)

@@ -1,9 +1,10 @@
 package underscore_book.case_studies.test_async_code
 
 import book.case_studies.test_async_code.{TestUptimeClient, UptimeService}
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
-class UptimeSpec extends WordSpec with Matchers {
+class UptimeSpec extends AnyWordSpec with Matchers {
   "Uptime" should {
     "calculate total uptime" in {
         val hosts = Map("host1" -> 10, "host2" -> 7, "host3" -> 4)

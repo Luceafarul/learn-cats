@@ -1,11 +1,11 @@
 package underscore_book.ch06_semigroupal_and_applicative
 
-import cats.data.Validated
-import org.scalatest.{WordSpec, Matchers}
 import cats.data.Validated.Valid
 import cats.data.Validated.Invalid
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
-class FormValidationSpec extends WordSpec with Matchers {
+class FormValidationSpec extends AnyWordSpec with Matchers {
   import book.ch06_semigroupal_and_applicative.FormValidation._
 
   "FormValidation" should {

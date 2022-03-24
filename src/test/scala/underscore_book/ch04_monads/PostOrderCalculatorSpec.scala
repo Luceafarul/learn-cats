@@ -1,9 +1,9 @@
 package underscore_book.ch04_monads
 
-import cats.data.State
-import org.scalatest.{WordSpec, Matchers}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
-class PostOrderCalculatorSpec extends WordSpec with Matchers {
+class PostOrderCalculatorSpec extends AnyWordSpec with Matchers {
   "PostOrderCalculator" should {
     import book.ch04_monads.PostOrderCalculator._
 

@@ -1,9 +1,10 @@
 package underscore_book.ch03_functors
 
 import book.ch03_functors.{Box, Codec}
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
-class CodecSpec extends WordSpec with Matchers {
+class CodecSpec extends AnyWordSpec with Matchers {
   "Codec" should {
     "encode boolean value into string" in {
       import book.ch03_functors.Codec.booleanCodec

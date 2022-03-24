@@ -1,8 +1,9 @@
 package underscore_book.ch02_monoids_and_semigroups
 
-import org.scalatest.{WordSpec, Matchers}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
-class MonoidSpec extends WordSpec with Matchers {
+class MonoidSpec extends AnyWordSpec with Matchers {
   "Monoid Set" should {
     "return union of two Int ets" in {
       import book.ch02_monoids_and_semigroups.Monoid

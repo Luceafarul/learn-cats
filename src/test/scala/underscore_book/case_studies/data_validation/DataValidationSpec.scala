@@ -1,14 +1,14 @@
 package underscore_book.case_studies.data_validation
 
 import book.case_studies.data_validation.{CheckF, Predicate, UserValidation}
-import cats.data.Validated
 import cats.data.Validated._
 import cats.data.NonEmptyList
 import cats.syntax.either._
 import cats.instances.list._
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest.matchers.should.Matchers
 
-class DataValidationSpec extends WordSpec with Matchers {
+class DataValidationSpec extends AnyWordSpec with Matchers {
   "CheckF" should {
     "validate and combine value" in {
       val a: CheckF[List[String], Int] = CheckF { v =>

@@ -2,9 +2,10 @@ package underscore_book.ch04_monads
 
 import book.ch04_monads.Id
 import cats.Id
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
-class IdSpec extends WordSpec with Matchers {
+class IdSpec extends AnyWordSpec with Matchers {
   "Id" should {
     "return wrapped value" in {
       Id.pure(7) shouldBe 7

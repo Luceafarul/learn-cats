@@ -1,9 +1,10 @@
 package underscore_book.ch04_monads
 
 import book.ch04_monads.Monads
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
-class MonadSpec extends WordSpec with Matchers {
+class MonadSpec extends AnyWordSpec with Matchers {
   "Monad" should {
     val bigList = List.fill[BigInt](50000)(7)
     "foldRigh should throw an StackOverflowError on deep recursion" in {

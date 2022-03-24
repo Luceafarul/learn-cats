@@ -3,12 +3,13 @@ package underscore_book.case_studies.map_reduce
 import book.case_studies.map_reduce.MapReduce
 import cats.instances.string._
 import cats.instances.int._
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
 import scala.concurrent._
 import scala.concurrent.duration._
 
-class MapReduceSpec extends WordSpec with Matchers {
+class MapReduceSpec extends AnyWordSpec with Matchers {
   "MapReduce" should {
     "apply function f and reduce with foldMap" in {
       val result01 = MapReduce.foldMap(Vector(1, 2, 3, 4, 5))(identity)

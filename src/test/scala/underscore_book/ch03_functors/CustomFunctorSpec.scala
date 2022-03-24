@@ -3,9 +3,10 @@ package underscore_book.ch03_functors
 import book.ch03_functors.{Box, Branch, Leaf, Tree}
 import cats.Functor
 import cats.syntax.functor._
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
-class CustomFunctorSpec extends WordSpec with Matchers {
+class CustomFunctorSpec extends AnyWordSpec with Matchers {
   "CustomFunctor" should {
     "add 1 to value in the Box" in {
       val boxWithInt = Box(13)

@@ -1,8 +1,9 @@
 package underscore_book.ch04_monads
 
-import org.scalatest.{WordSpec, Matchers}
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest.matchers.should.Matchers
 
-class OptionMonadSpec extends WordSpec with Matchers {
+class OptionMonadSpec extends AnyWordSpec with Matchers {
 
   final case class Person(name: String, age: Int)
 

@@ -1,8 +1,8 @@
 package book.ch01_intro.p01_anatomy_of_type_class
 
-final case class Person(name: String, email: String)
+final case class Person(name: String, age: Int, email: String)
 
-object JsonWriterInstances {
+object Person {
   implicit val stringWriter: JsonWriter[String] = (value: String) => JsString(value)
 
   implicit val personWriter: JsonWriter[Person] = (value: Person) => JsObject(Map(

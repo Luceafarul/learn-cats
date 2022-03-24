@@ -3,7 +3,8 @@ package underscore_book.ch05_monad_transformers
 import cats.data.EitherT
 import cats.instances.future._
 import cats.syntax.applicative._
-import org.scalatest.{AsyncWordSpec, Matchers}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AsyncWordSpec
 
 class TransformersSpec extends AsyncWordSpec with Matchers {
   "Transformers" should {

@@ -3,10 +3,10 @@ package underscore_book.ch01_intro.p02_exercise
 import book.ch01_intro.p01_anatomy_of_type_class.Person
 import book.ch01_intro.p02_exercise.Printable
 import book.ch03_functors.Box
-import underscore_book.ch03_functors._
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class PrintableSpec extends FlatSpec with Matchers with SpecHelper {
+class PrintableSpec extends AnyFlatSpec with Matchers with SpecHelper {
 
   import book.ch01_intro.p02_exercise.PrintableSyntax._
   import book.ch01_intro.p02_exercise.PrintableInstances._
@@ -20,7 +20,7 @@ class PrintableSpec extends FlatSpec with Matchers with SpecHelper {
     implicit val printablePerson: Printable[Person] =
       (person: Person) => s"Person(${person.name}, ${person.email})"
 
-    val marcus = Person("Marcus", "marcus@test.mail")
+    val marcus = Person("Marcus", 37, "marcus@test.mail")
     Printable.format(marcus) shouldBe "Person(Marcus, marcus@test.mail)"
     marcus.format shouldBe "Person(Marcus, marcus@test.mail)"
   }
