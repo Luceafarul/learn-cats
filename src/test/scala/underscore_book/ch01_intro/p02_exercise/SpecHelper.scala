@@ -7,4 +7,5 @@ trait SpecHelper {
   val cat = Cat("Marcus", 7, "Black")
   val cat1 = Cat("Garfield", 38, "orange and black")
   val cat2 = Cat("Heathcliff", 33, "orange and black")
+  val cat3 = Cat("Garfield", 38, "orange and black")
 }

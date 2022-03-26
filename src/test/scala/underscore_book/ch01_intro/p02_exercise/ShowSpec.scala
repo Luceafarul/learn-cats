@@ -1,40 +1,27 @@
 package underscore_book.ch01_intro.p02_exercise
 
 import cats.Show
+import cats.syntax.show._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
 class ShowSpec extends AnyFlatSpec with Matchers with SpecHelper {
 
-  import cats.syntax.show._
+  private val result = "Marcus is a 7 year-old black cat."
 
   "Show" should "return String representation of Cat" in {
     implicit val showCat: Show[Cat] = (cat: Cat) => {
-      import cats.instances.int._
-      import cats.instances.string._
-
-      val name = cat.name.show
-      val age = cat.age.show
-      val color = cat.color.show.toLowerCase
-
-      s"$name is a $age year-old $color cat."
+      s"${cat.name} is a ${cat.age} year-old ${cat.color.toLowerCase} cat."
     }
 
-    cat.show shouldBe "Marcus is a 7 year-old black cat."
+    cat.show shouldBe result
   }
 
   it should "return String representation of Cat (using show method)" in {
-    import cats.instances.int._
-    import cats.instances.string._
-
     implicit val showCat: Show[Cat] = Show.show { cat =>
-      val name = cat.name.show
-      val age = cat.age.show
-      val color = cat.color.show.toLowerCase
-
-      s"$name is a $age year-old $color cat."
+      s"${cat.name} is a ${cat.age} year-old ${cat.color.toLowerCase} cat."
     }
 
-    cat.show shouldBe "Marcus is a 7 year-old black cat."
+    cat.show shouldBe result
   }
 }

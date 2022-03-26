@@ -38,22 +38,15 @@ class PrintableSpec extends AnyFlatSpec with Matchers with SpecHelper {
   }
 
   it should "accept Boolean and return String representation" in {
-    val t = true
-    val f = false
-
-    t.format shouldBe "yes"
-    f.format shouldBe "no"
+    true.format shouldBe "yes"
+    false.format shouldBe "no"
   }
 
   it should "return String representation of the Box with Int" in {
-    val boxWithInt = Box(123)
-
-    boxWithInt.format shouldBe "123"
+    Box(123).format shouldBe "123"
   }
 
     it should "return String representation of the Box with True" in {
-    val boxWithTrue = Box(true)
-
-    boxWithTrue.format shouldBe "yes"
+    Box(true).format shouldBe "yes"
   }
 }
