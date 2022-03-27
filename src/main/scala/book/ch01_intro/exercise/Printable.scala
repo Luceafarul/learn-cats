@@ -1,4 +1,4 @@
-package book.ch01_intro.p02_exercise
+package book.ch01_intro.exercise
 
 trait Printable[A] { self =>
 

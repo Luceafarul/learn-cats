@@ -1,8 +1,8 @@
-package underscore_book.ch01_intro.p01_anatomy_of_type_class
+package underscore_book.ch01_intro.anatomy_of_type_class
 
-import book.ch01_intro.p01_anatomy_of_type_class.{JsNull, JsNumber, JsObject, JsString, Json, Person}
-import book.ch01_intro.p01_anatomy_of_type_class.Person._
-import book.ch01_intro.p01_anatomy_of_type_class.JsonSyntax._
+import book.ch01_intro.anatomy_of_type_class.{JsNull, JsNumber, JsObject, JsString, Json, Person}
+import book.ch01_intro.anatomy_of_type_class.Person._
+import book.ch01_intro.anatomy_of_type_class.JsonSyntax._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 

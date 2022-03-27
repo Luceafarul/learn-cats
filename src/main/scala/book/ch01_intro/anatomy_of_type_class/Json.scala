@@ -1,4 +1,4 @@
-package book.ch01_intro.p01_anatomy_of_type_class
+package book.ch01_intro.anatomy_of_type_class
 
 sealed trait Json
 final case class JsObject(values: Map[String, Json]) extends Json

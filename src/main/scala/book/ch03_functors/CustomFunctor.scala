@@ -1,6 +1,6 @@
 package book.ch03_functors
 
-import book.ch01_intro.p02_exercise.Printable
+import book.ch01_intro.exercise.Printable
 import cats.Functor
 
 final case class Box[A](value: A)

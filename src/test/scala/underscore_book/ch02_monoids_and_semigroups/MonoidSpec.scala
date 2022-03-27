@@ -7,7 +7,7 @@ class MonoidSpec extends AnyWordSpec with Matchers {
   "Monoid Set" should {
     "return union of two Int ets" in {
       import book.ch02_monoids_and_semigroups.Monoid
-      import book.ch02_monoids_and_semigroups.SetMonoid.unionMonoid
+      import Monoid.Instances.unionMonoid
 
       val intSetMonoid = Monoid[Set[Int]]
       val set01 = Set(1, 2, 3)
@@ -20,7 +20,7 @@ class MonoidSpec extends AnyWordSpec with Matchers {
 
     "return union of two String sets" in {
       import book.ch02_monoids_and_semigroups.Monoid
-      import book.ch02_monoids_and_semigroups.SetMonoid.unionMonoid
+      import Monoid.Instances.unionMonoid
 
       val stringSetMonoid = Monoid[Set[String]]
       val set01 = Set("A", "B", "C")

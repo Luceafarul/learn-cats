@@ -1,4 +1,4 @@
-package underscore_book.ch01_intro.p02_exercise
+package underscore_book.ch01_intro.exercise
 
 import cats.Eq
 import cats.syntax.eq._

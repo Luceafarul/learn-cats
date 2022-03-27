@@ -1,10 +1,7 @@
 package underscore_book.ch02_monoids_and_semigroups
 
-import book.ch02_monoids_and_semigroups.super_adder.{Order, SuperAdder}
-import cats.Monoid
-import cats.instances.int._
+import book.ch02_monoids_and_semigroups.exercise.{Order, SuperAdder}
 import cats.instances.option._
-import cats.syntax.semigroup._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 

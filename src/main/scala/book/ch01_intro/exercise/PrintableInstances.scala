@@ -1,4 +1,4 @@
-package book.ch01_intro.p02_exercise
+package book.ch01_intro.exercise
 
 object PrintableInstances {
   implicit val printableString: Printable[String] = (value: String) => value
