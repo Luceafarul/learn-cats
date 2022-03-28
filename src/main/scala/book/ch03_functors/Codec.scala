@@ -17,7 +17,7 @@ object Codec {
   def decode[A](s: String)(implicit codec: Codec[A]): A = codec.decode(s)
 
   implicit val stringCodec: Codec[String] = new Codec[String] {
-    def encode(value: String): String = value
+    def encode(s: String): String = s
     def decode(s: String): String = s
   }
 
@@ -30,8 +30,6 @@ object Codec {
     b => if (b) "yes" else "no"
   )
 
-  implicit def boxCodec[A](implicit codec: Codec[A]): Codec[Box[A]] = codec.imap(
-    s => Box(s),
-    box => box.value
-  )
+  implicit def boxCodec[A](implicit codec: Codec[A]): Codec[Box[A]] =
+    codec.imap(s => Box(s), box => box.value)
 }

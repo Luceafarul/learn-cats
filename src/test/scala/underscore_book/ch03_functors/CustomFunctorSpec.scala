@@ -20,7 +20,7 @@ class CustomFunctorSpec extends AnyWordSpec with Matchers {
       tree.map(n => n + 3) shouldBe Branch(Branch(Leaf(4), Leaf(5)), Leaf(6))
     }
 
-    "mutilple string by 3 in the Tree" in {
+    "multiple string by 3 in the Tree" in {
       val tree = Tree.branch(
         Tree.leaf("hi"),
         Tree.branch(Tree.leaf("we"), Tree.leaf("are"))

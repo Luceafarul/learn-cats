@@ -1,7 +1,6 @@
 package book.ch01_intro.exercise
 
 trait Printable[A] { self =>
-
   def format(value: A): String
 
   def contramap[B](f: B => A): Printable[B] = new Printable[B] {

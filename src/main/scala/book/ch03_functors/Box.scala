@@ -10,5 +10,6 @@ object Box {
     def map[A, B](box: Box[A])(f: A => B): Box[B] = Box(f(box.value))
   }
 
-  implicit def printableBox[A](implicit printable: Printable[A]): Printable[Box[A]] = printable.contramap(box => box.value)
+  implicit def printableBox[A](implicit printable: Printable[A]): Printable[Box[A]] =
+    printable.contramap(box => box.value)
 }
