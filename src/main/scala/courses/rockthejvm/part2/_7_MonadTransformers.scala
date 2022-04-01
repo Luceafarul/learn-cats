@@ -3,11 +3,22 @@ package courses.rockthejvm.part2
 import scala.concurrent.Future
 
 object _7_MonadTransformers extends App {
-  def sumAllOptions(xs: List[Option[Int]]): Int = ???
+  def sumAllOptions(xs: List[Option[Int]]): Int =
+    xs.collect { case Some(x) => x }.sum
+
+  println(sumAllOptions(List(Some(1), Some(2), None, Some(4), Some(5))))
+
 
   // Option transformer
 
   import cats.data.OptionT
+
+  def sumAllOptionsT(xs: List[Option[Int]]): Int = {
+    import cats.implicits._
+    OptionT(xs).sumAll
+  }
+
+  println(sumAllOptionsT(List(Some(1), Some(2), None, Some(4), Some(5))))
 
   val listOfNumberOptions: OptionT[List, Int] = OptionT(List(Option(1), Option(2)))
   val listOfCharOptions: OptionT[List, Char] = OptionT(List(Option('a'), Option('b'), Option.empty[Char]))
