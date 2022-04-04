@@ -3,9 +3,9 @@ package book.ch04_monads
 import cats.Id
 
 object Id {
-  def pure[A](value: A): Id[A] = value
+  def pure[A](a: A): Id[A] = a
 
-  def map[A, B](initial: Id[A])(f: A => B): Id[B] = f(initial)
+  def map[A, B](fa: Id[A])(f: A => B): Id[B] = f(fa)
   
-  def flatMap[A, B](initial: Id[A])(f: A => Id[B]): Id[B] = f(initial)
+  def flatMap[A, B](fa: Id[A])(f: A => Id[B]): Id[B] = f(fa)
 }
