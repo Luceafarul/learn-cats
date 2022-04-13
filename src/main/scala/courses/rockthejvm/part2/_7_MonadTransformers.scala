@@ -42,6 +42,9 @@ object _7_MonadTransformers extends App {
   println(listOfEithers)
   println(futureOfEither)
 
+  println(EitherT.right[String](Option.empty[Int]))
+  println(EitherT.right[String](Option(10)))
+
   // Exercise:
   // We have a multi-machine cluster for your business which will receive a traffic surge
   //  following a media appearance.
