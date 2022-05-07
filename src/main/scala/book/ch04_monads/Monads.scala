@@ -1,7 +1,5 @@
 package book.ch04_monads
 
-import scala.collection.immutable.Nil
-
 import cats.Eval
 
 object Monads {
