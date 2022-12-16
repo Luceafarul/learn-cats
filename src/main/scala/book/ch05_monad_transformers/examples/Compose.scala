@@ -70,12 +70,14 @@ object Compose extends App {
 
   type Logged[A] = Writer[List[String], A]
 
+  // Methods generally return untransformed stacks:
   def parseNumber(s: String): Logged[Option[Int]] =
     Try(s.toInt).toOption match {
       case Some(num) => Writer(List(s"Read $s"), Some(num))
       case None => Writer(List(s"Failed on $s"), None)
     }
 
+  // Consumers use monad transformers locally to simplify composition:
   def addAll(a: String, b: String, c: String): Logged[Option[Int]] = {
     import cats.data.OptionT
     val result = for {
@@ -93,4 +95,6 @@ object Compose extends App {
   println(resultOne.value)
   println(resultTwo)
   println(resultTwo.value)
+
+  // TODO: how to create addAll that got List[String] as input
 }

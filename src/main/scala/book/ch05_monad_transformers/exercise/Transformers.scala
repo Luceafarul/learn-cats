@@ -17,8 +17,8 @@ object Transformers extends App {
 
   def powerLevel(ally: String): Response[Int] = {
     powerLevels.get(ally) match {
-      case Some(value) => value.pure[Response]
-      case None        => EitherT.leftT(s"Error: $ally unreachable")
+      case Some(value) => value.pure[Response] // EitherT.right(Future(avg)) why need add future?
+      case None        => EitherT.leftT(s"Error: $ally unreachable") // EitherT.left(Future(s"$ally unreachable"))
     }
   }
 
@@ -38,4 +38,6 @@ object Transformers extends App {
   tacticalReport("Jazz", "Bumblebee")
   tacticalReport("Bumblebee", "Hot Rod")
   tacticalReport("Jazz", "Ironhide")
+
+  println(powerLevel("Jazz"))
 }
