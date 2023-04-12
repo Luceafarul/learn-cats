@@ -7,3 +7,5 @@ project/project
 .idea/
 .vscode/
 *.sc
+.DS_Store
+.bsp/
