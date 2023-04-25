@@ -73,7 +73,7 @@ object FreeMonadExample {
 
   // The program will crash if a type is incorrectly specified.
   def impureCompiler: KVStoreA ~> Id =
-    new (KVStoreA ~> Id) {
+    new (KVStoreA ~> Id) { // The same as new FunctionK[KVStoreA, Id]
       // A very simple (and imprecise) key-value store
       val kvs = mutable.Map.empty[String, Any]
 
@@ -289,13 +289,16 @@ object FreeMonadExample {
 
     catProgram.foldMap(interpreter)
 
+    // FreeT examples:
     import TeletypeOps._
 
+    // First
     val state = teletypeProgram.foldMap(teletypeInterpreter)
     val initialState = Nil
     val (stored, _) = state.run(initialState).value
     println(stored)
 
+    // Second
     val hoisted = onComplete.hoist(optTryLift)
     val evaluated = hoisted.foldMap(tryInterpreter)
     val res = evaluated.value

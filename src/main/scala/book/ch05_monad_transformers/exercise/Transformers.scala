@@ -7,6 +7,7 @@ import cats.syntax.applicative._
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.Success
+import scala.util.Failure
 
 object Transformers extends App {
 
@@ -33,6 +34,7 @@ object Transformers extends App {
       case Success(Right(true))  => println(s"$ally1 and $ally2 are ready to roll out!")
       case Success(Right(false)) => println(s"$ally1 and $ally2 need a recharge.")
       case Success(Left(error))  => println(error)
+      case Failure(e)            => println(s"Something went wrong: ${e.getMessage}")
     }
 
   tacticalReport("Jazz", "Bumblebee")

@@ -27,7 +27,7 @@ class CustomMonadSpec extends AnyWordSpec with Matchers {
 
       result shouldBe branch(
         branch(leaf(p1.name), leaf(p2.name)),
-        leaf(p3.name)
+        leaf(p3.name),
       )
       result.isInstanceOf[Tree[String]] shouldBe true
     }

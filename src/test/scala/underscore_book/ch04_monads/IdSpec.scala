@@ -1,7 +1,7 @@
 package underscore_book.ch04_monads
 
 import book.ch04_monads.Id
-import cats.Id
+import cats.Id._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
