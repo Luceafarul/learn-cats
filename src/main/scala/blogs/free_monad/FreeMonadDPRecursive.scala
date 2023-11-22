@@ -4,27 +4,27 @@ import cats.free.Free
 import cats.kernel.Monoid
 import cats.arrow.FunctionK
 import cats.{~>, Id}
-import blogs.free_monad.FreeMonadDPRecursive.ArrayA.Put
-import blogs.free_monad.FreeMonadDPRecursive.ArrayA.Get
+import blogs.free_monad.FreeMonadDPRecursive.Store.Put
+import blogs.free_monad.FreeMonadDPRecursive.Store.Get
 
 // Example of https://levelup.gitconnected.com/functional-dynamic-programming-scala-cats-and-free-monad-b71c34c209
 object FreeMonadDPRecursive extends App {
   // Step 1: Define the algebra
-  sealed trait ArrayA[A] extends Serializable with Product
+  sealed trait Store[A] extends Serializable with Product
 
-  object ArrayA {
-    final case class Put[T](index: Int, value: T) extends ArrayA[Unit]
-    final case class Get[T](index: Int) extends ArrayA[Option[T]]
+  object Store {
+    final case class Put[T](index: Int, value: T) extends Store[Unit]
+    final case class Get[T](index: Int) extends Store[Option[T]]
   }
 
   // Step 2: Creating the DSL (Domain Specific Language), using smart constructors
-  type ArrayStore[A] = Free[ArrayA, A]
+  type ArrayStore[A] = Free[Store, A]
 
   def put[T](index: Int, value: T): ArrayStore[Unit] =
-    Free.liftF[ArrayA, Unit](ArrayA.Put(index, value))
+    Free.liftF[Store, Unit](Store.Put(index, value))
 
   def get[T](index: Int): ArrayStore[Option[T]] =
-    Free.liftF[ArrayA, Option[T]](ArrayA.Get(index))
+    Free.liftF[Store, Option[T]](Store.Get(index))
 
   // Step 3: Build program using DSL
   def cdRecursive(i: Int): ArrayStore[Option[BigInt]] =
@@ -40,13 +40,13 @@ object FreeMonadDPRecursive extends App {
     } yield newV
 
   // Step 4: Interpreter for executing our program description to execute it.
-  def interpreter(n: Int): ArrayA ~> Id = new (ArrayA ~> Id) {
+  def interpreter(n: Int): Store ~> Id = new (Store ~> Id) {
     val array = new Array[Any](n + 1)
     array(1) = BigInt(0)
     array(2) = BigInt(1)
-    3.to(n).map(i => array(i) = -1)
+    3.to(n).foreach(i => array(i) = -1)
 
-    def apply[A](fa: ArrayA[A]): Id[A] =
+    def apply[A](fa: Store[A]): Id[A] =
       fa match {
         case Put(index, value) =>
           println(s"put($index, $value)")
